@@ -149,35 +149,35 @@ jobs:
           docker buildx imagetools inspect ${{ env.DOCKER_IMAGE }}:${{ needs.check_version.outputs.full_version }}
           docker buildx imagetools inspect ${{ env.GHCR_IMAGE }}:${{ needs.check_version.outputs.full_version }}
 
-  # =========================================================
-  # 更新 README.md
-  # =========================================================
-  update_readme:
-    runs-on: ubuntu-latest
-    # 依赖检查版本和合并作业
-    needs: [check_version, merge]
-    if: needs.check_version.outputs.should_build == 'true'
-    permissions:
-      contents: write
-    steps:
-      - name: 检出代码
-        uses: actions/checkout@v4
+#  # =========================================================
+#  # 更新 README.md
+#  # =========================================================
+#  update_readme:
+#    runs-on: ubuntu-latest
+#    # 依赖检查版本和合并作业
+#    needs: [check_version, merge]
+#    if: needs.check_version.outputs.should_build == 'true'
+#    permissions:
+#      contents: write
+#    steps:
+#      - name: 检出代码
+#        uses: actions/checkout@v4
 
-      - name: 运行 README 更新脚本
-        run: bash .github/workflows/update-readme.sh ${{ needs.check_version.outputs.full_version }}
+#      - name: 运行 README 更新脚本
+#        run: bash .github/workflows/update-readme.sh ${{ needs.check_version.outputs.full_version }}
 
-      - name: 提交并推送 README.md
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+#      - name: 提交并推送 README.md
+#        run: |
+#          git config --global user.name 'github-actions[bot]'
+#          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
           # 检查是否有文件变动
-          if [[ -n $(git status --porcelain README.md) ]]; then
-            git add README.md
-            git commit -m "docs: 自动更新 README，添加 Alpine 版本 v${{ needs.check_version.outputs.full_version }}"
-            git push
-          else
-            echo "README.md 文件无变化，无需提交。"
-          fi
+#          if [[ -n $(git status --porcelain README.md) ]]; then
+#            git add README.md
+#            git commit -m "docs: 自动更新 README，添加 Alpine 版本 v${{ needs.check_version.outputs.full_version }}"
+#            git push
+#          else
+#            echo "README.md 文件无变化，无需提交。"
+#          fi
 
   # =========================================================
   # 通知作业 - 记录检查结果
