@@ -31,16 +31,16 @@ if [ -z "$OFFICIAL_VERSION" ]; then
     echo "::error::无法从 Docker Hub API 响应中解析出有效的 Alpine 版本标签。" >&2
     exit 1
 fi
-
+OFFICIAL_VERSION=3.21.3
 echo "官方 Alpine 最新版本: $OFFICIAL_VERSION" >&2
 
 # 获取我们镜像的最新版本
-OUR_API_URL="https://hub.docker.com/v2/repositories/${DOCKER_IMAGE}/tags/?page_size=100&ordering=last_updated"
-OUR_RESPONSE=$(curl -fsSL --retry 3 --retry-delay 2 "$OUR_API_URL" || echo '{"results":[]}')
+#OUR_API_URL="https://hub.docker.com/v2/repositories/${DOCKER_IMAGE}/tags/?page_size=100&ordering=last_updated"
+#OUR_RESPONSE=$(curl -fsSL --retry 3 --retry-delay 2 "$OUR_API_URL" || echo '{"results":[]}')
 
 # 提取我们镜像中符合 x.y.z 格式的最新版本
-OUR_VERSION=$(echo "$OUR_RESPONSE" | jq -r '.results[].name' | grep -E '^[0-9]+(\.[0-9]+){1,2}$' | sort -Vr | head -n 1 || echo "0.0.0")
-
+#OUR_VERSION=$(echo "$OUR_RESPONSE" | jq -r '.results[].name' | grep -E '^[0-9]+(\.[0-9]+){1,2}$' | sort -Vr | head -n 1 || echo "0.0.0")
+OUR_VERSION=0.0.0
 echo "我们的镜像最新版本: $OUR_VERSION" >&2
 
 # 版本比较函数
